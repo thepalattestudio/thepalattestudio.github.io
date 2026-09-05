@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Art Gallery | The Palette Studio</title>
+<meta name="description" content="Explore our vibrant art gallery featuring original works and student paintings across acrylic canvas painting, watercolor, oil pastel, pencil sketching, and one stroke painting." />
+<link rel="icon" type="image/png" href="images/favicon.png" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          cream: { DEFAULT: '#FBF6EB', dark: '#F3EBDA' },
+          ink: '#2B2013',
+          cerulean: { light: '#5FA9CE', DEFAULT: '#1E7CA8', dark: '#125678' },
+          coral: { light: '#FF9E8C', DEFAULT: '#FF6B54', dark: '#E44E38' },
+          sunshine: { light: '#FFE28A', DEFAULT: '#FFC93C', dark: '#F0AC0C' },
+        },
+        fontFamily: {
+          display: ['"Playfair Display"', 'serif'],
+          body: ['Inter', 'sans-serif'],
+        },
+        borderRadius: {
+          blob: '63% 37% 54% 46% / 55% 48% 52% 45%',
+          blob2: '42% 58% 65% 35% / 48% 41% 59% 52%',
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { background-color: #FBF6EB; }
+
+  .stroke-underline path {
+    stroke-dasharray: 340;
+    stroke-dashoffset: 0;
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.3,1);
+  }
+  .fade-up.in-view { opacity: 1; transform: translateY(0); }
+
+  .blob { border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%; }
+  .blob2 { border-radius: 42% 58% 65% 35% / 48% 41% 59% 52%; }
+
+  .paper-dots {
+    background-image: radial-gradient(rgba(43,32,19,.12) 1px, transparent 1.4px);
+    background-size: 18px 18px;
+  }
+
+  #mobile-menu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+  #mobile-menu.open { max-height: 420px; }
+
+  .filter-btn.active {
+    background-color: #FF6B54;
+    color: #FBF6EB;
+    border-color: #FF6B54;
+  }
+
+  .gallery-card {
+    transition: transform 0.35s cubic-bezier(.2,.8,.3,1), box-shadow 0.35s ease;
+  }
+  .gallery-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 35px -15px rgba(43,32,19,0.25);
+  }
+
+  ::selection { background: #FFC93C; color: #2B2013; }
+</style>
+</head>
+
+<body class="font-body text-ink antialiased">
+
+<!-- ================= HEADER ================= -->
+<header id="site-header" class="fixed top-0 left-0 w-full z-50 bg-cream/90 backdrop-blur-md shadow-sm">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 flex items-center justify-between py-4">
+    <a href="index.html#home" class="flex items-center gap-2 group">
+      <span class="relative w-9 h-9 shrink-0">
+        <span class="absolute inset-0 bg-coral blob group-hover:rotate-45 transition-transform duration-500"></span>
+        <span class="absolute inset-0 flex items-center justify-center text-cream text-sm"><i class="fa-solid fa-palette"></i></span>
+      </span>
+      <span class="font-display font-bold text-xl md:text-2xl tracking-tight text-ink">The Palette Studio</span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-9 font-medium text-[15px]">
+      <a href="index.html#home" class="hover:text-coral transition-colors">Home</a>
+      <a href="index.html#about" class="hover:text-coral transition-colors">About</a>
+      <a href="index.html#courses" class="hover:text-coral transition-colors">Courses</a>
+      <a href="gallery.html" class="text-coral font-bold transition-colors">Gallery</a>
+      <a href="index.html#why-us" class="hover:text-coral transition-colors">Why Us</a>
+      <a href="index.html#contact" class="hover:text-coral transition-colors">Contact</a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href="index.html#contact" class="hidden sm:inline-flex items-center gap-2 bg-coral hover:bg-coral-dark text-cream font-semibold text-sm px-5 py-2.5 rounded-full shadow-md shadow-coral/30 transition-colors">
+        <i class="fa-solid fa-brush"></i> Book Free Trial
+      </a>
+      <button id="menu-btn" aria-label="Toggle menu" aria-expanded="false" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-full border border-ink/15 text-ink">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="lg:hidden bg-cream border-t border-ink/10 px-5">
+    <nav class="flex flex-col gap-1 py-3 font-medium">
+      <a href="index.html#home" class="py-2.5 border-b border-ink/5">Home</a>
+      <a href="index.html#about" class="py-2.5 border-b border-ink/5">About</a>
+      <a href="index.html#courses" class="py-2.5 border-b border-ink/5">Courses</a>
+      <a href="gallery.html" class="py-2.5 border-b border-ink/5 text-coral font-bold">Gallery</a>
+      <a href="index.html#why-us" class="py-2.5 border-b border-ink/5">Why Us</a>
+      <a href="index.html#contact" class="py-2.5 border-b border-ink/5">Contact</a>
+      <a href="index.html#contact" class="mt-3 mb-3 text-center bg-coral text-cream font-semibold px-5 py-2.5 rounded-full">Book Free Trial</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="relative pt-36 pb-16 md:pt-44 md:pb-20 overflow-hidden">
+  <div class="absolute inset-0 paper-dots opacity-40 -z-10"></div>
+  <div class="max-w-7xl mx-auto px-5 md:px-8 text-center">
+    <span class="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-1.5 rounded-full text-sm font-semibold text-cerulean-dark border border-cerulean/20 mb-5">
+      <i class="fa-solid fa-paintbrush text-coral"></i> Visual Showcase &middot; The Palette Studio
+    </span>
+
+    <h1 class="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl text-ink max-w-3xl mx-auto">
+      The Art
+      <span class="relative inline-block text-coral">
+        Gallery
+        <svg class="stroke-underline absolute left-0 -bottom-2 w-full h-4" viewBox="0 0 340 20" fill="none" preserveAspectRatio="none">
+          <path d="M4 14C60 4 130 20 200 10C250 3 300 14 336 6" stroke="#FFC93C" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </span>
+    </h1>
+
+    <p class="mt-6 text-lg text-ink/70 max-w-2xl mx-auto leading-relaxed">
+      A curated collection of original works and student creations from our studio &mdash; exploring vibrant acrylic canvas paintings, delicate watercolors, expressive pencil sketches, rich oil pastels, and fluid one-stroke designs.
+    </p>
+
+    <!-- Category Filters -->
+    <div class="mt-10 flex flex-wrap justify-center gap-2.5 sm:gap-3">
+      <button type="button" data-filter="all" class="filter-btn active px-5 py-2.5 rounded-full text-sm font-semibold border border-ink/15 bg-white text-ink hover:border-coral transition-all">All Artworks</button>
+      <button type="button" data-filter="acrylic-canvas" class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold border border-ink/15 bg-white text-ink hover:border-coral transition-all">Acrylic Canvas</button>
+      <button type="button" data-filter="watercolor" class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold border border-ink/15 bg-white text-ink hover:border-coral transition-all">Watercolor</button>
+      <button type="button" data-filter="sketching" class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold border border-ink/15 bg-white text-ink hover:border-coral transition-all">Pencil Sketching</button>
+      <button type="button" data-filter="pastel" class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold border border-ink/15 bg-white text-ink hover:border-coral transition-all">Oil Pastel</button>
+      <button type="button" data-filter="onestroke" class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold border border-ink/15 bg-white text-ink hover:border-coral transition-all">One Stroke</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GALLERY GRID ================= -->
+<section class="pb-24 md:pb-32">
+  <div class="max-w-7xl mx-auto px-5 md:px-8">
+    <div id="gallery-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+
+      <!-- Item 1: Acrylic Canvas Painting -->
+      <div class="gallery-item gallery-card rounded-3xl overflow-hidden bg-white border border-ink/10 shadow-sm cursor-pointer group flex flex-col justify-between"
+           data-category="acrylic-canvas"
+           data-image="images/gallery/gallery-1.jpg"
+           data-title="Divine Vitthal &amp; The Pandharpur Wari"
+           data-badge="Acrylic Canvas Painting"
+           data-artist="Priti Rane Studio"
+           data-caption="A devotional acrylic on canvas composition capturing the spiritual euphoria of the Warkari yatra, depicting Lord Vitthal with pilgrims bearing the veena, mridangam, and holy Tulsi.">
+        <div>
+          <div class="aspect-[4/3] relative overflow-hidden bg-cream flex items-center justify-center">
+            <img src="images/gallery/gallery-1.jpg" alt="Divine Vitthal &amp; The Pandharpur Wari" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+              <span class="inline-flex items-center gap-1.5 text-cream text-xs font-semibold bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> View Artwork
+              </span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between text-xs mb-2">
+              <span class="font-bold text-coral uppercase tracking-wider">Acrylic Canvas</span>
+              <span class="text-ink/40 font-medium">Priti Rane Studio</span>
+            </div>
+            <h3 class="font-display font-bold text-xl text-ink group-hover:text-coral transition-colors">Divine Vitthal &amp; The Pandharpur Wari</h3>
+            <p class="mt-2.5 text-sm text-ink/65 leading-relaxed">A devotional acrylic on canvas composition capturing the spiritual euphoria of the Warkari yatra, depicting Lord Vitthal with pilgrims bearing the veena, mridangam, and holy Tulsi.</p>
+          </div>
+        </div>
+        <div class="px-6 pb-6 pt-0">
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-coral group-hover:translate-x-1 transition-transform">
+            <span>Explore painting</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </span>
+        </div>
+      </div>
+
+      <!-- Item 2: Watercolor Painting -->
+      <div class="gallery-item gallery-card rounded-3xl overflow-hidden bg-white border border-ink/10 shadow-sm cursor-pointer group flex flex-col justify-between"
+           data-category="watercolor"
+           data-image="images/gallery/gallery-2.jpg"
+           data-title="Heritage Ghats &amp; Sacred Waters"
+           data-badge="Watercolor Painting"
+           data-artist="By Priti Rane"
+           data-caption="Serene watercolor landscape depicting ancient riverside stone temples, sacred bathing ghats, and delicate morning water reflections with translucent pigment washes.">
+        <div>
+          <div class="aspect-[4/3] relative overflow-hidden bg-cream flex items-center justify-center">
+            <img src="images/gallery/gallery-2.jpg" alt="Heritage Ghats &amp; Sacred Waters" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+              <span class="inline-flex items-center gap-1.5 text-cream text-xs font-semibold bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> View Artwork
+              </span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between text-xs mb-2">
+              <span class="font-bold text-cerulean uppercase tracking-wider">Watercolor Painting</span>
+              <span class="text-ink/40 font-medium">By Priti Rane</span>
+            </div>
+            <h3 class="font-display font-bold text-xl text-ink group-hover:text-cerulean transition-colors">Heritage Ghats &amp; Sacred Waters</h3>
+            <p class="mt-2.5 text-sm text-ink/65 leading-relaxed">Serene watercolor landscape depicting ancient riverside stone temples, sacred bathing ghats, and delicate morning water reflections with translucent pigment washes.</p>
+          </div>
+        </div>
+        <div class="px-6 pb-6 pt-0">
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-cerulean group-hover:translate-x-1 transition-transform">
+            <span>Explore painting</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </span>
+        </div>
+      </div>
+
+      <!-- Item 3: Oil Pastel -->
+      <div class="gallery-item gallery-card rounded-3xl overflow-hidden bg-white border border-ink/10 shadow-sm cursor-pointer group flex flex-col justify-between"
+           data-category="pastel"
+           data-image="images/gallery/gallery-3.jpg"
+           data-title="Rustic Harvest Still Life"
+           data-badge="Oil Pastel"
+           data-artist="Priti Rane Studio"
+           data-caption="A vibrant still-life rendered in rich oil pastels, focusing on spherical volume, warm earthen hues, reflective highlights, and smooth pigment blending.">
+        <div>
+          <div class="aspect-[4/3] relative overflow-hidden bg-cream flex items-center justify-center">
+            <img src="images/gallery/gallery-3.jpg" alt="Rustic Harvest Still Life" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+              <span class="inline-flex items-center gap-1.5 text-cream text-xs font-semibold bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> View Artwork
+              </span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between text-xs mb-2">
+              <span class="font-bold text-sunshine-dark uppercase tracking-wider">Oil Pastel</span>
+              <span class="text-ink/40 font-medium">Studio Study</span>
+            </div>
+            <h3 class="font-display font-bold text-xl text-ink group-hover:text-coral transition-colors">Rustic Harvest Still Life</h3>
+            <p class="mt-2.5 text-sm text-ink/65 leading-relaxed">A vibrant still-life rendered in rich oil pastels, focusing on spherical volume, warm earthen hues, reflective highlights, and smooth pigment blending.</p>
+          </div>
+        </div>
+        <div class="px-6 pb-6 pt-0">
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-sunshine-dark group-hover:translate-x-1 transition-transform">
+            <span>Explore painting</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </span>
+        </div>
+      </div>
+
+      <!-- Item 4: Pencil Sketching -->
+      <div class="gallery-item gallery-card rounded-3xl overflow-hidden bg-white border border-ink/10 shadow-sm cursor-pointer group flex flex-col justify-between"
+           data-category="sketching"
+           data-image="images/gallery/gallery-4.jpg"
+           data-title="The Sorceress Portrait"
+           data-badge="Pencil Sketching"
+           data-artist="Student Artwork (Sarayu)"
+           data-caption="A detailed graphite pencil character sketch exhibiting expressive facial proportions, smooth tonal blending, and intricate linework from our young student Sarayu.">
+        <div>
+          <div class="aspect-[4/3] relative overflow-hidden bg-cream flex items-center justify-center">
+            <img src="images/gallery/gallery-4.jpg" alt="The Sorceress Portrait" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+              <span class="inline-flex items-center gap-1.5 text-cream text-xs font-semibold bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> View Artwork
+              </span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between text-xs mb-2">
+              <span class="font-bold text-ink/70 uppercase tracking-wider">Pencil Sketching</span>
+              <span class="text-ink/40 font-medium">Student Work &middot; Sarayu</span>
+            </div>
+            <h3 class="font-display font-bold text-xl text-ink group-hover:text-coral transition-colors">The Sorceress Portrait</h3>
+            <p class="mt-2.5 text-sm text-ink/65 leading-relaxed">A detailed graphite pencil character sketch exhibiting expressive facial proportions, smooth tonal blending, and intricate linework from our young student Sarayu.</p>
+          </div>
+        </div>
+        <div class="px-6 pb-6 pt-0">
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-ink/70 group-hover:translate-x-1 transition-transform">
+            <span>Explore sketch</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </span>
+        </div>
+      </div>
+
+      <!-- Item 5: One Stroke Painting -->
+      <div class="gallery-item gallery-card rounded-3xl overflow-hidden bg-white border border-ink/10 shadow-sm cursor-pointer group flex flex-col justify-between"
+           data-category="onestroke"
+           data-image="images/gallery/gallery-5.jpg"
+           data-title="Blossoming Botanicals"
+           data-badge="One Stroke Painting"
+           data-artist="Priti Rane Studio"
+           data-caption="Double-loaded flat brush floral study on textured canvas board, demonstrating smooth two-tone gradation across flower petals and upright bamboo stems.">
+        <div>
+          <div class="aspect-[4/3] relative overflow-hidden bg-cream flex items-center justify-center">
+            <img src="images/gallery/gallery-5.jpg" alt="Blossoming Botanicals" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+              <span class="inline-flex items-center gap-1.5 text-cream text-xs font-semibold bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> View Artwork
+              </span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between text-xs mb-2">
+              <span class="font-bold text-cerulean-dark uppercase tracking-wider">One Stroke Painting</span>
+              <span class="text-ink/40 font-medium">Priti Rane Studio</span>
+            </div>
+            <h3 class="font-display font-bold text-xl text-ink group-hover:text-coral transition-colors">Blossoming Botanicals</h3>
+            <p class="mt-2.5 text-sm text-ink/65 leading-relaxed">Double-loaded flat brush floral study on textured canvas board, demonstrating smooth two-tone gradation across flower petals and upright bamboo stems.</p>
+          </div>
+        </div>
+        <div class="px-6 pb-6 pt-0">
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-cerulean-dark group-hover:translate-x-1 transition-transform">
+            <span>Explore painting</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </span>
+        </div>
+      </div>
+
+      <!-- Item 6: One Stroke Painting -->
+      <div class="gallery-item gallery-card rounded-3xl overflow-hidden bg-white border border-ink/10 shadow-sm cursor-pointer group flex flex-col justify-between"
+           data-category="onestroke"
+           data-image="images/gallery/gallery-6.jpg"
+           data-title="Midnight Flora Symphony"
+           data-badge="One Stroke Painting"
+           data-artist="Priti Rane Studio"
+           data-caption="A striking one-stroke floral composition on a dark backdrop, showcasing layered petal curves, serrated foliage, and delicate lilac clusters.">
+        <div>
+          <div class="aspect-[4/3] relative overflow-hidden bg-cream flex items-center justify-center">
+            <img src="images/gallery/gallery-6.jpg" alt="Midnight Flora Symphony" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+              <span class="inline-flex items-center gap-1.5 text-cream text-xs font-semibold bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> View Artwork
+              </span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between text-xs mb-2">
+              <span class="font-bold text-coral uppercase tracking-wider">One Stroke Painting</span>
+              <span class="text-ink/40 font-medium">Priti Rane Studio</span>
+            </div>
+            <h3 class="font-display font-bold text-xl text-ink group-hover:text-coral transition-colors">Midnight Flora Symphony</h3>
+            <p class="mt-2.5 text-sm text-ink/65 leading-relaxed">A striking one-stroke floral composition on a dark backdrop, showcasing layered petal curves, serrated foliage, and delicate lilac clusters.</p>
+          </div>
+        </div>
+        <div class="px-6 pb-6 pt-0">
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-coral group-hover:translate-x-1 transition-transform">
+            <span>Explore painting</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Free Trial Banner -->
+    <div class="mt-20 p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-ink to-[#1a130b] text-cream text-center relative overflow-hidden">
+      <div class="max-w-2xl mx-auto relative z-10">
+        <span class="inline-block p-3 rounded-full bg-sunshine/20 text-sunshine text-2xl mb-4"><i class="fa-solid fa-palette"></i></span>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl">Ready to create your own masterpiece?</h2>
+        <p class="mt-4 text-cream/70 text-base leading-relaxed">
+          Book a 100% free trial class with Priti Rane. Batches are capped at just 2&ndash;3 students with real-time 1:1 attention.
+        </p>
+        <div class="mt-8">
+          <a href="index.html#contact" class="inline-flex items-center gap-2 bg-coral hover:bg-coral-dark text-cream font-bold text-base px-8 py-4 rounded-full transition-colors shadow-lg shadow-coral/30">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Claim Your Free Trial Class
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LIGHTBOX MODAL ================= -->
+<div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+  <div class="relative max-w-4xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl">
+    <button type="button" onclick="closeLightbox()" aria-label="Close preview" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/50 text-white hover:bg-coral flex items-center justify-center transition-colors">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="max-h-[70vh] bg-ink/95 flex items-center justify-center overflow-hidden p-2 sm:p-4">
+      <img id="lightbox-img" src="" alt="Artwork Preview" class="max-h-[66vh] w-auto max-w-full object-contain rounded-xl shadow-lg" />
+    </div>
+    <div class="p-6 bg-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div class="pr-3">
+        <div class="flex items-center gap-2 mb-1">
+          <span id="lightbox-badge" class="text-xs font-bold uppercase tracking-wider text-coral"></span>
+          <span class="text-ink/30">&middot;</span>
+          <span id="lightbox-artist" class="text-xs font-semibold text-ink/60"></span>
+        </div>
+        <h3 id="lightbox-title" class="font-display font-bold text-xl sm:text-2xl text-ink"></h3>
+        <p id="lightbox-caption" class="text-sm text-ink/70 mt-1.5 leading-relaxed max-w-xl"></p>
+      </div>
+      <a href="index.html#contact" class="inline-flex items-center gap-2 bg-coral hover:bg-coral-dark text-cream font-semibold text-sm px-6 py-3 rounded-full transition-colors shrink-0 shadow-md shadow-coral/25">
+        Learn This Medium <i class="fa-solid fa-arrow-right text-xs"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-ink text-cream/70 pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-5 md:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 pb-10 border-b border-white/10">
+      <div class="flex items-center gap-2">
+        <span class="relative w-9 h-9 shrink-0">
+          <span class="absolute inset-0 bg-coral blob"></span>
+          <span class="absolute inset-0 flex items-center justify-center text-cream text-sm"><i class="fa-solid fa-palette"></i></span>
+        </span>
+        <span class="font-display font-bold text-xl text-cream">The Palette Studio</span>
+      </div>
+
+      <a href="tel:+918010369386" class="flex items-center gap-2 font-semibold text-cream/80 hover:text-sunshine transition-colors">
+        <i class="fa-solid fa-phone"></i> +91 80103 69386
+      </a>
+
+      <div class="flex items-center gap-4">
+        <a href="#" aria-label="Instagram" class="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center hover:bg-coral hover:border-coral transition-colors"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook" class="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center hover:bg-coral hover:border-coral transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="YouTube" class="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center hover:bg-coral hover:border-coral transition-colors"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#" aria-label="Pinterest" class="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center hover:bg-coral hover:border-coral transition-colors"><i class="fa-brands fa-pinterest-p"></i></a>
+      </div>
+    </div>
+
+    <div class="pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-sm">
+      <p>&copy; <span id="year"></span> The Palette Studio. All rights reserved.</p>
+      <p class="italic font-display">Where imagination meets the canvas.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Mobile menu
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  menuBtn.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', isOpen);
+    menuBtn.innerHTML = isOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+  });
+
+  // Filter Buttons
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.getAttribute('data-filter');
+      galleryItems.forEach(item => {
+        if (filter === 'all' || item.getAttribute('data-category') === filter) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Lightbox Modal
+  const modal = document.getElementById('lightbox-modal');
+  const modalImg = document.getElementById('lightbox-img');
+  const modalTitle = document.getElementById('lightbox-title');
+  const modalBadge = document.getElementById('lightbox-badge');
+  const modalArtist = document.getElementById('lightbox-artist');
+  const modalCaption = document.getElementById('lightbox-caption');
+
+  function openLightbox(src, title, badge, caption, artist) {
+    modalImg.src = src;
+    modalTitle.textContent = title;
+    modalBadge.textContent = badge;
+    modalCaption.textContent = caption || '';
+    modalArtist.textContent = artist || 'The Palette Studio';
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  // Attach click listener to each gallery card
+  galleryItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const src = item.getAttribute('data-image');
+      const title = item.getAttribute('data-title');
+      const badge = item.getAttribute('data-badge');
+      const caption = item.getAttribute('data-caption');
+      const artist = item.getAttribute('data-artist');
+      openLightbox(src, title, badge, caption, artist);
+    });
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+      closeLightbox();
+    }
+  });
+</script>
+
+</body>
+</html>

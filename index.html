@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Palette Studio | Where Imagination Meets the Canvas</title>
+<meta name="description" content="Online art classes for ages 5+ with Priti Rane. Small batches of 2-3 students, personal attention, free trial class available. International students welcome." />
+<link rel="icon" type="image/png" href="images/favicon.png" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          cream: { DEFAULT: '#FBF6EB', dark: '#F3EBDA' },
+          ink: '#2B2013',
+          cerulean: { light: '#5FA9CE', DEFAULT: '#1E7CA8', dark: '#125678' },
+          coral: { light: '#FF9E8C', DEFAULT: '#FF6B54', dark: '#E44E38' },
+          sunshine: { light: '#FFE28A', DEFAULT: '#FFC93C', dark: '#F0AC0C' },
+        },
+        fontFamily: {
+          display: ['"Playfair Display"', 'serif'],
+          body: ['Inter', 'sans-serif'],
+        },
+        borderRadius: {
+          blob: '63% 37% 54% 46% / 55% 48% 52% 45%',
+          blob2: '42% 58% 65% 35% / 48% 41% 59% 52%',
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { background-color: #FBF6EB; }
+
+  /* ---- Brush-stroke draw-on underline (signature motif) ---- */
+  .stroke-underline path {
+    stroke-dasharray: 340;
+    stroke-dashoffset: 340;
+    transition: stroke-dashoffset 1.1s cubic-bezier(.4,.1,.2,1);
+  }
+  .in-view .stroke-underline path { stroke-dashoffset: 0; }
+
+  /* ---- Fade in up on scroll ---- */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.3,1);
+  }
+  .fade-up.in-view { opacity: 1; transform: translateY(0); }
+  .fade-up.delay-1 { transition-delay: .1s; }
+  .fade-up.delay-2 { transition-delay: .2s; }
+  .fade-up.delay-3 { transition-delay: .3s; }
+  .fade-up.delay-4 { transition-delay: .4s; }
+
+  /* ---- Floating blobs ---- */
+  @keyframes floatSlow {
+    0%,100% { transform: translate(0,0) rotate(0deg); }
+    50% { transform: translate(-10px,-22px) rotate(6deg); }
+  }
+  @keyframes floatSlow2 {
+    0%,100% { transform: translate(0,0) rotate(0deg); }
+    50% { transform: translate(14px,18px) rotate(-8deg); }
+  }
+  .float-a { animation: floatSlow 7s ease-in-out infinite; }
+  .float-b { animation: floatSlow2 8.5s ease-in-out infinite; }
+
+  /* ---- CTA pulse glow ---- */
+  @keyframes pulseGlow {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,107,84,.45), 0 8px 24px -4px rgba(255,107,84,.5); }
+    50% { box-shadow: 0 0 0 14px rgba(255,107,84,0), 0 8px 30px -2px rgba(255,107,84,.65); }
+  }
+  .pulse-cta { animation: pulseGlow 2.6s ease-in-out infinite; }
+
+  /* ---- Header transition ---- */
+  #site-header { transition: background-color .35s ease, box-shadow .35s ease, padding .35s ease; }
+
+  /* ---- Course card lift ---- */
+  .course-card { transition: transform .35s cubic-bezier(.2,.8,.3,1), box-shadow .35s ease, border-color .35s ease; }
+  .course-card:hover { transform: translateY(-10px) rotate(-.3deg); box-shadow: 0 24px 45px -18px rgba(43,32,19,.35); }
+
+  /* ---- Blob organic shape ---- */
+  .blob { border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%; }
+  .blob2 { border-radius: 42% 58% 65% 35% / 48% 41% 59% 52%; }
+
+  /* ---- Texture dots ---- */
+  .paper-dots {
+    background-image: radial-gradient(rgba(43,32,19,.12) 1px, transparent 1.4px);
+    background-size: 18px 18px;
+  }
+
+  /* ---- Mobile menu ---- */
+  #mobile-menu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+  #mobile-menu.open { max-height: 420px; }
+
+  ::selection { background: #FFC93C; color: #2B2013; }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .float-a, .float-b, .pulse-cta, .fade-up { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+  }
+
+  :focus-visible { outline: 3px solid #1E7CA8; outline-offset: 2px; }
+
+  /* Interactive form styling & shake animation */
+  .shake {
+    animation: shakeAnim 0.4s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  @keyframes shakeAnim {
+    10%, 90% { transform: translate3d(-2px, 0, 0); }
+    20%, 80% { transform: translate3d(4px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+  }
+
+  .field-error {
+    border-color: #FF6B54 !important;
+    background-color: #FFF9F8 !important;
+  }
+  .field-valid {
+    border-color: #10B981 !important;
+  }
+</style>
+</head>
+
+<body class="font-body text-ink antialiased">
+
+<!-- ================= HEADER ================= -->
+<header id="site-header" class="fixed top-0 left-0 w-full z-50">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 flex items-center justify-between py-4">
+    <a href="#home" class="flex items-center gap-2 group">
+      <span class="relative w-9 h-9 shrink-0">
+        <span class="absolute inset-0 bg-coral blob group-hover:rotate-45 transition-transform duration-500"></span>
+        <span class="absolute inset-0 flex items-center justify-center text-cream text-sm"><i class="fa-solid fa-palette"></i></span>
+      </span>
+      <span class="font-display font-bold text-xl md:text-2xl tracking-tight text-ink">The Palette Studio</span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-9 font-medium text-[15px]">
+      <a href="#home" class="hover:text-coral transition-colors">Home</a>
+      <a href="#about" class="hover:text-coral transition-colors">About</a>
+      <a href="#courses" class="hover:text-coral transition-colors">Courses</a>
+      <a href="gallery.html" class="hover:text-coral transition-colors">Gallery</a>
+      <a href="#why-us" class="hover:text-coral transition-colors">Why Us</a>
+      <a href="#contact" class="hover:text-coral transition-colors">Contact</a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href="#contact" class="hidden sm:inline-flex items-center gap-2 bg-coral hover:bg-coral-dark text-cream font-semibold text-sm px-5 py-2.5 rounded-full shadow-md shadow-coral/30 transition-colors">
+        <i class="fa-solid fa-brush"></i> Book Free Trial
+      </a>
+      <button id="menu-btn" aria-label="Toggle menu" aria-expanded="false" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-full border border-ink/15 text-ink">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="lg:hidden bg-cream border-t border-ink/10 px-5">
+    <nav class="flex flex-col gap-1 py-3 font-medium">
+      <a href="#home" class="py-2.5 border-b border-ink/5">Home</a>
+      <a href="#about" class="py-2.5 border-b border-ink/5">About</a>
+      <a href="#courses" class="py-2.5 border-b border-ink/5">Courses</a>
+      <a href="gallery.html" class="py-2.5 border-b border-ink/5">Gallery</a>
+      <a href="#why-us" class="py-2.5 border-b border-ink/5">Why Us</a>
+      <a href="#contact" class="py-2.5 border-b border-ink/5">Contact</a>
+      <a href="#contact" class="mt-3 mb-3 text-center bg-coral text-cream font-semibold px-5 py-2.5 rounded-full">Book Free Trial</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section id="home" class="relative pt-36 pb-24 md:pt-44 md:pb-32 overflow-hidden">
+  <!-- Abstract painted backdrop -->
+  <div class="absolute inset-0 -z-10 bg-cream"></div>
+  <div class="absolute -top-24 -right-24 w-[420px] h-[420px] bg-cerulean/20 blob float-a -z-10"></div>
+  <div class="absolute top-1/3 -left-32 w-[340px] h-[340px] bg-sunshine/30 blob2 float-b -z-10"></div>
+  <div class="absolute bottom-0 right-1/4 w-[220px] h-[220px] bg-coral/20 blob float-b -z-10"></div>
+  <div class="absolute inset-0 paper-dots opacity-40 -z-10"></div>
+
+  <div class="max-w-7xl mx-auto px-5 md:px-8 grid lg:grid-cols-[1.1fr,0.9fr] gap-16 items-center">
+    <div class="fade-up">
+      <span class="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-1.5 rounded-full text-sm font-semibold text-cerulean-dark border border-cerulean/20 mb-6">
+        <i class="fa-solid fa-earth-americas"></i> Online Art Classes &middot; Ages 5+ &middot; International
+      </span>
+
+      <h1 class="font-display font-extrabold text-[2.6rem] leading-[1.08] sm:text-6xl lg:text-[4rem] text-ink">
+        Where imagination
+        <span class="relative inline-block text-coral">
+          meets the canvas
+          <svg class="stroke-underline absolute left-0 -bottom-2 w-full h-4" viewBox="0 0 340 20" fill="none" preserveAspectRatio="none">
+            <path d="M4 14C60 4 130 20 200 10C250 3 300 14 336 6" stroke="#FFC93C" stroke-width="7" stroke-linecap="round"/>
+          </svg>
+        </span>.
+      </h1>
+
+      <p class="mt-7 text-lg text-ink/70 max-w-xl leading-relaxed">
+        Live, online art classes taught by <strong class="text-ink">Priti Rane</strong> for young artists and grown-up beginners alike. Small batches of just 2&ndash;3 students mean every stroke gets noticed &mdash; wherever in the world you're painting from.
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-4">
+        <a href="#contact" class="pulse-cta inline-flex items-center gap-2 bg-coral hover:bg-coral-dark text-cream font-bold text-base px-8 py-4 rounded-full transition-colors">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Claim Your Free Trial Class
+        </a>
+        <a href="#courses" class="inline-flex items-center gap-2 font-semibold text-ink/80 hover:text-cerulean px-2 py-4 transition-colors">
+          Explore Courses <i class="fa-solid fa-arrow-right text-sm"></i>
+        </a>
+      </div>
+
+      <div class="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm font-medium text-ink/60">
+        <span class="flex items-center gap-2"><i class="fa-solid fa-users text-cerulean"></i> Max 3 students per batch</span>
+        <span class="flex items-center gap-2"><i class="fa-solid fa-globe text-cerulean"></i> 100% online, anywhere</span>
+        <span class="flex items-center gap-2"><i class="fa-solid fa-gift text-cerulean"></i> Free trial class</span>
+      </div>
+    </div>
+
+    <div class="relative fade-up delay-2 hidden md:block">
+      <div class="relative aspect-square max-w-md mx-auto">
+        <div class="absolute inset-6 bg-cerulean blob shadow-2xl shadow-cerulean/30"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-[82%] h-[82%] blob2 bg-cream border-[3px] border-white shadow-xl overflow-hidden relative">
+            <img src="images/hero-art.jpg" alt="The Palette Studio artwork" class="w-full h-full object-cover block" onerror="this.style.display='none'; document.getElementById('hero-fallback').style.display='flex';" />
+            <div id="hero-fallback" class="w-full h-full hidden flex-col items-center justify-center gap-3 text-center px-6">
+              <i class="fa-solid fa-palette text-5xl text-coral"></i>
+              <p class="font-display font-bold text-xl text-ink">Live 1:1 attention,<br/>every single class</p>
+            </div>
+          </div>
+        </div>
+        <div class="absolute -top-2 -left-2 w-16 h-16 bg-sunshine blob float-a shadow-lg"></div>
+        <div class="absolute bottom-4 -right-4 w-20 h-20 bg-coral blob2 float-b shadow-lg"></div>
+        <div class="absolute top-1/4 -right-8 w-10 h-10 rounded-full bg-cerulean-light float-b"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about" class="py-24 md:py-32 bg-white relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-72 h-72 bg-sunshine/10 blob -z-0"></div>
+  <div class="max-w-7xl mx-auto px-5 md:px-8 grid lg:grid-cols-[0.8fr,1.2fr] gap-16 items-center relative">
+
+    <div class="fade-up flex justify-center lg:justify-start">
+      <div class="relative w-64 h-64 sm:w-80 sm:h-80">
+        <div class="absolute inset-0 bg-coral blob2"></div>
+        <div class="absolute inset-3 bg-cream blob overflow-hidden border-4 border-white shadow-inner relative">
+          <img src="images/priti-rane.jpg" alt="Priti Rane - Founder & Lead Artist" class="w-full h-full object-cover block" onerror="this.style.display='none'; document.getElementById('pr-fallback').style.display='flex';" />
+          <div id="pr-fallback" class="w-full h-full hidden items-center justify-center bg-cream">
+            <span class="font-display font-bold text-6xl text-cerulean-dark">PR</span>
+          </div>
+        </div>
+        <div class="absolute -bottom-3 -left-3 w-16 h-16 bg-sunshine rounded-full flex items-center justify-center shadow-lg float-a">
+          <i class="fa-solid fa-heart text-coral"></i>
+        </div>
+        <div class="absolute -top-4 right-2 w-12 h-12 bg-cerulean rounded-full flex items-center justify-center shadow-lg float-b">
+          <i class="fa-solid fa-star text-cream text-sm"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-up delay-1">
+      <p class="font-semibold text-coral uppercase tracking-wider text-sm mb-3">Meet Your Teacher</p>
+      <h2 class="relative inline-block font-display font-bold text-4xl md:text-5xl text-ink mb-2">
+        Priti Rane
+        <svg class="stroke-underline absolute left-0 -bottom-1 w-full h-3" viewBox="0 0 260 16" fill="none" preserveAspectRatio="none">
+          <path d="M3 11C45 3 100 15 150 8C185 3 220 12 256 5" stroke="#1E7CA8" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </h2>
+      <p class="mt-6 text-lg text-ink/70 leading-relaxed max-w-2xl">
+        With years of hands-on teaching experience, Priti Rane founded The Palette Studio to give every student &mdash; from curious five-year-olds to lifelong beginners &mdash; a space to explore colour, technique, and confidence at their own pace. Her classes blend gentle structure with plenty of room for imagination, so every canvas feels personal.
+      </p>
+      <p class="mt-4 text-lg text-ink/70 leading-relaxed max-w-2xl">
+        Priti believes art is best learned in small circles, not crowded classrooms &mdash; which is why every batch is capped at just three students. It means real feedback, real encouragement, and real progress you can see, class after class.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-6">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-cerulean/10 flex items-center justify-center text-cerulean"><i class="fa-solid fa-chalkboard-user"></i></div>
+          <div><p class="font-bold text-ink leading-none">Founder &amp; Lead Artist</p><p class="text-sm text-ink/50">The Palette Studio</p></div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-coral/10 flex items-center justify-center text-coral"><i class="fa-solid fa-earth-asia"></i></div>
+          <div><p class="font-bold text-ink leading-none">Teaches Students</p><p class="text-sm text-ink/50">Worldwide, online</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COURSES ================= -->
+<section id="courses" class="py-24 md:py-32 bg-cream relative">
+  <div class="max-w-7xl mx-auto px-5 md:px-8">
+    <div class="text-center max-w-2xl mx-auto fade-up">
+      <p class="font-semibold text-coral uppercase tracking-wider text-sm mb-3">Our Courses</p>
+      <h2 class="relative inline-block font-display font-bold text-4xl md:text-5xl text-ink">
+        A medium for every artist
+        <svg class="stroke-underline absolute left-1/2 -translate-x-1/2 -bottom-2 w-40 h-4" viewBox="0 0 200 20" fill="none" preserveAspectRatio="none">
+          <path d="M4 14C40 4 90 20 130 10C155 3 180 14 196 6" stroke="#FF6B54" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </h2>
+      <p class="mt-6 text-lg text-ink/60">Five hands-on mediums, taught step by step, in batches small enough for every question to get answered.</p>
+    </div>
+
+    <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+
+      <div class="course-card fade-up bg-white rounded-3xl p-8 border border-ink/5 shadow-sm">
+        <div class="w-16 h-16 blob bg-coral/15 flex items-center justify-center text-coral text-2xl mb-6"><i class="fa-solid fa-palette"></i></div>
+        <h3 class="font-display font-bold text-xl mb-2">Acrylic Canvas Painting</h3>
+        <p class="text-ink/60 leading-relaxed">Explore layering, rich texture, and vibrant colour compositions on stretched canvas with versatile acrylics.</p>
+      </div>
+
+      <div class="course-card fade-up delay-1 bg-white rounded-3xl p-8 border border-ink/5 shadow-sm">
+        <div class="w-16 h-16 blob2 bg-cerulean/15 flex items-center justify-center text-cerulean text-2xl mb-6"><i class="fa-solid fa-droplet"></i></div>
+        <h3 class="font-display font-bold text-xl mb-2">Watercolor Painting</h3>
+        <p class="text-ink/60 leading-relaxed">Master fluid washes, wet-on-wet blending, transparency, and delicate lighting effects on watercolor paper.</p>
+      </div>
+
+      <div class="course-card fade-up delay-2 bg-white rounded-3xl p-8 border border-ink/5 shadow-sm">
+        <div class="w-16 h-16 blob bg-ink/10 flex items-center justify-center text-ink/70 text-2xl mb-6"><i class="fa-solid fa-pencil"></i></div>
+        <h3 class="font-display font-bold text-xl mb-2">Pencil Sketching</h3>
+        <p class="text-ink/60 leading-relaxed">Master line, cross-hatching, proportion, and tonal shading &mdash; the foundation every strong artist builds on.</p>
+      </div>
+
+      <div class="course-card fade-up delay-3 bg-white rounded-3xl p-8 border border-ink/5 shadow-sm">
+        <div class="w-16 h-16 blob2 bg-sunshine/25 flex items-center justify-center text-sunshine-dark text-2xl mb-6"><i class="fa-solid fa-swatchbook"></i></div>
+        <h3 class="font-display font-bold text-xl mb-2">Oil Pastel</h3>
+        <p class="text-ink/60 leading-relaxed">Bold, blendable colour loved for its rich creamy consistency, vibrant gradients, and textural depth.</p>
+      </div>
+
+      <div class="course-card fade-up delay-4 bg-white rounded-3xl p-8 border border-ink/5 shadow-sm">
+        <div class="w-16 h-16 blob bg-coral/15 flex items-center justify-center text-coral text-2xl mb-6"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+        <h3 class="font-display font-bold text-xl mb-2">One Stroke Painting</h3>
+        <p class="text-ink/60 leading-relaxed">Learn the signature decorative technique of double-loading brushes to paint petals and leaves in a single stroke.</p>
+      </div>
+
+      <div class="course-card fade-up delay-4 rounded-3xl p-8 bg-gradient-to-br from-cerulean to-cerulean-dark text-cream flex flex-col justify-center items-start">
+        <i class="fa-solid fa-gift text-3xl mb-4 text-sunshine"></i>
+        <h3 class="font-display font-bold text-xl mb-2">Not sure where to start?</h3>
+        <p class="text-cream/80 mb-5 leading-relaxed">Take a free trial class and we'll help you pick the perfect medium.</p>
+        <a href="#contact" class="font-semibold text-sm inline-flex items-center gap-2 bg-cream text-cerulean-dark px-5 py-2.5 rounded-full hover:bg-sunshine transition-colors">Book Free Trial <i class="fa-solid fa-arrow-right text-xs"></i></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY US ================= -->
+<section id="why-us" class="py-24 md:py-32 bg-ink text-cream relative overflow-hidden">
+  <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-coral/20 blob float-a -z-0"></div>
+  <div class="absolute -top-16 right-0 w-64 h-64 bg-cerulean/25 blob2 float-b -z-0"></div>
+
+  <div class="max-w-7xl mx-auto px-5 md:px-8 relative">
+    <div class="text-center max-w-2xl mx-auto fade-up">
+      <p class="font-semibold text-sunshine uppercase tracking-wider text-sm mb-3">The Palette Studio Edge</p>
+      <h2 class="relative inline-block font-display font-bold text-4xl md:text-5xl">
+        Why families choose us
+        <svg class="stroke-underline absolute left-1/2 -translate-x-1/2 -bottom-2 w-40 h-4" viewBox="0 0 200 20" fill="none" preserveAspectRatio="none">
+          <path d="M4 14C40 4 90 20 130 10C155 3 180 14 196 6" stroke="#FFC93C" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </h2>
+    </div>
+
+    <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="fade-up bg-white/5 border border-white/10 rounded-3xl p-7 backdrop-blur-sm">
+        <div class="w-14 h-14 blob bg-cerulean flex items-center justify-center text-cream text-xl mb-5"><i class="fa-solid fa-earth-americas"></i></div>
+        <h3 class="font-display font-bold text-lg mb-2">100% Online &amp; International</h3>
+        <p class="text-cream/60 text-sm leading-relaxed">Join live from anywhere in the world &mdash; all you need is a device and a little curiosity.</p>
+      </div>
+      <div class="fade-up delay-1 bg-white/5 border border-white/10 rounded-3xl p-7 backdrop-blur-sm">
+        <div class="w-14 h-14 blob2 bg-coral flex items-center justify-center text-cream text-xl mb-5"><i class="fa-solid fa-users"></i></div>
+        <h3 class="font-display font-bold text-lg mb-2">Intimate Batches</h3>
+        <p class="text-cream/60 text-sm leading-relaxed">Strictly 2&ndash;3 students per batch, so no one gets lost in the crowd.</p>
+      </div>
+      <div class="fade-up delay-2 bg-white/5 border border-white/10 rounded-3xl p-7 backdrop-blur-sm">
+        <div class="w-14 h-14 blob bg-sunshine flex items-center justify-center text-ink text-xl mb-5"><i class="fa-solid fa-hand-holding-heart"></i></div>
+        <h3 class="font-display font-bold text-lg mb-2">Personalized Attention</h3>
+        <p class="text-cream/60 text-sm leading-relaxed">Real-time feedback tailored to each student's pace, style, and goals.</p>
+      </div>
+      <div class="fade-up delay-3 bg-white/5 border border-white/10 rounded-3xl p-7 backdrop-blur-sm">
+        <div class="w-14 h-14 blob2 bg-cerulean-light flex items-center justify-center text-ink text-xl mb-5"><i class="fa-solid fa-seedling"></i></div>
+        <h3 class="font-display font-bold text-lg mb-2">Ages 5 and Up</h3>
+        <p class="text-cream/60 text-sm leading-relaxed">Classes thoughtfully paced for young beginners through adult learners.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT / BOOKING ================= -->
+<section id="contact" class="py-24 md:py-32 bg-cream relative overflow-hidden">
+  <div class="absolute top-10 left-10 w-48 h-48 bg-sunshine/20 blob float-a -z-0"></div>
+  <div class="max-w-7xl mx-auto px-5 md:px-8 grid lg:grid-cols-2 gap-14 items-start relative">
+
+    <div class="fade-up lg:sticky lg:top-32">
+      <p class="font-semibold text-coral uppercase tracking-wider text-sm mb-3">Get Started</p>
+      <h2 class="relative inline-block font-display font-bold text-4xl md:text-5xl text-ink mb-6">
+        Book your free trial class
+        <svg class="stroke-underline absolute left-0 -bottom-2 w-full h-4" viewBox="0 0 340 20" fill="none" preserveAspectRatio="none">
+          <path d="M4 14C60 4 130 20 200 10C250 3 300 14 336 6" stroke="#1E7CA8" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </h2>
+      <p class="text-lg text-ink/70 leading-relaxed max-w-md">Tell us a little about your artist and we'll get back to you with batch timings that fit your timezone. No pressure, no obligation &mdash; just a free class to see if we're the right fit.</p>
+
+      <ul class="mt-8 space-y-4">
+        <li class="flex items-center gap-3 text-ink/70"><i class="fa-solid fa-circle-check text-cerulean"></i> One free trial class, no cost</li>
+        <li class="flex items-center gap-3 text-ink/70"><i class="fa-solid fa-circle-check text-cerulean"></i> Batches of 2&ndash;3 students only</li>
+        <li class="flex items-center gap-3 text-ink/70"><i class="fa-solid fa-circle-check text-cerulean"></i> Flexible timing across timezones</li>
+      </ul>
+
+      <a href="tel:+918010369386" class="mt-8 inline-flex items-center gap-4 bg-white rounded-2xl border border-ink/10 px-5 py-4 shadow-sm hover:shadow-md hover:border-cerulean/30 transition-shadow">
+        <span class="w-12 h-12 rounded-full bg-cerulean/10 flex items-center justify-center text-cerulean text-lg shrink-0"><i class="fa-solid fa-phone"></i></span>
+        <span>
+          <span class="block text-xs font-semibold uppercase tracking-wide text-ink/40">Prefer to talk?</span>
+          <span class="block font-display font-bold text-lg text-ink">+91 80103 69386</span>
+        </span>
+      </a>
+    </div>
+
+    <div id="booking-container" class="fade-up delay-1 bg-white rounded-3xl shadow-xl shadow-ink/5 p-7 sm:p-10 border border-ink/5 relative">
+
+      <!-- ================= STEP 1: REGISTRATION DETAILS ================= -->
+      <form id="trial-form" class="space-y-5">
+        <div class="border-b border-ink/10 pb-4 mb-2">
+          <span class="text-xs uppercase tracking-wider font-bold text-coral">Step 1 of 2</span>
+          <h3 class="text-xl font-display font-bold text-ink">Student Registration</h3>
+          <p class="text-xs text-ink/60 mt-0.5">Please provide your details. We will send an instant email verification code.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div class="sm:col-span-2">
+            <label for="parent-name" class="block text-sm font-semibold text-ink/80 mb-1.5">Parent / Student Name <span class="text-coral">*</span></label>
+            <input required id="parent-name" name="parent-name" type="text" autocomplete="name" placeholder="e.g. Ananya Sharma" class="w-full rounded-xl border border-ink/15 px-4 py-3 focus:border-cerulean focus:ring-2 focus:ring-cerulean/20 outline-none transition text-ink" />
+          </div>
+
+          <div class="sm:col-span-2">
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="email" class="block text-sm font-semibold text-ink/80">Email Address <span class="text-coral">*</span></label>
+              <span class="text-[11px] text-ink/50 font-medium">OTP code will be sent here</span>
+            </div>
+            <div class="relative">
+              <input required id="email" name="email" type="email" autocomplete="email" placeholder="e.g. ananya.art@gmail.com" class="w-full rounded-xl border border-ink/15 px-4 py-3 pr-11 focus:border-cerulean focus:ring-2 focus:ring-cerulean/20 outline-none transition text-ink" />
+              <div id="email-status-icon" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-ink/30 pointer-events-none transition-colors">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+            </div>
+            <!-- Email validation / fake protection feedback message -->
+            <div id="email-feedback" class="mt-2 text-xs hidden"></div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="phone" class="block text-sm font-semibold text-ink/80">Phone Number <span class="text-coral">*</span></label>
+              <span class="text-[11px] text-ink/50 font-medium">No OTP required</span>
+            </div>
+            <input required id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+91 80103 69386" class="w-full rounded-xl border border-ink/15 px-4 py-3 focus:border-cerulean focus:ring-2 focus:ring-cerulean/20 outline-none transition text-ink" />
+            <p class="mt-1 text-[11px] text-ink/50">For batch coordination via WhatsApp / call</p>
+          </div>
+
+          <div>
+            <label for="student-age" class="block text-sm font-semibold text-ink/80 mb-1.5">Age of Student <span class="text-coral">*</span></label>
+            <input required id="student-age" name="student-age" type="number" min="5" max="99" placeholder="e.g. 8 (ages 5+)" class="w-full rounded-xl border border-ink/15 px-4 py-3 focus:border-cerulean focus:ring-2 focus:ring-cerulean/20 outline-none transition text-ink" />
+          </div>
+
+          <div>
+            <label for="course" class="block text-sm font-semibold text-ink/80 mb-1.5">Course Interest</label>
+            <select id="course" name="course" class="w-full rounded-xl border border-ink/15 px-4 py-3 focus:border-cerulean focus:ring-2 focus:ring-cerulean/20 outline-none transition bg-white text-ink">
+              <option>Acrylic Canvas Painting</option>
+              <option>Watercolor Painting</option>
+              <option>Pencil Sketching</option>
+              <option>Oil Pastel</option>
+              <option>One Stroke Painting</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="timezone" class="block text-sm font-semibold text-ink/80 mb-1.5">Preferred Timezone / City <span class="text-coral">*</span></label>
+            <input required id="timezone" name="timezone" type="text" placeholder="e.g. IST (India), GMT-5 (USA)" class="w-full rounded-xl border border-ink/15 px-4 py-3 focus:border-cerulean focus:ring-2 focus:ring-cerulean/20 outline-none transition text-ink" />
+          </div>
+
+          <div class="sm:col-span-2 pt-2">
+            <button type="submit" id="send-otp-btn" class="pulse-cta w-full inline-flex items-center justify-center gap-2 bg-coral hover:bg-coral-dark text-cream font-bold text-base px-8 py-4 rounded-full transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+              <span>Send Verification Code</span>
+              <i class="fa-solid fa-arrow-right text-sm"></i>
+            </button>
+            <p class="mt-3 text-center text-xs text-ink/50 flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-shield-halved text-cerulean"></i> 100% Free Trial &middot; No Payment Info Needed &middot; Protected Against Spam
+            </p>
+          </div>
+        </div>
+      </form>
+
+      <!-- ================= STEP 2: EMAIL OTP VERIFICATION ================= -->
+      <div id="otp-container" class="hidden space-y-6">
+        <div class="border-b border-ink/10 pb-4">
+          <span class="text-xs uppercase tracking-wider font-bold text-cerulean">Step 2 of 2</span>
+          <h3 class="text-xl font-display font-bold text-ink">Verify Your Email</h3>
+          <p class="text-xs text-ink/60 mt-0.5">Please check your inbox and enter the 6-digit confirmation code below.</p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-cerulean/10 border border-cerulean/20 flex items-start gap-3">
+          <div class="w-9 h-9 rounded-full bg-cerulean text-cream flex items-center justify-center shrink-0 mt-0.5">
+            <i class="fa-solid fa-paper-plane text-sm"></i>
+          </div>
+          <div class="text-sm">
+            <p class="font-bold text-ink">Verification Code Dispatched</p>
+            <p class="text-ink/70 mt-0.5 text-xs sm:text-sm">
+              Sent to <strong id="display-user-email" class="text-ink font-semibold break-all"></strong>.
+              <button type="button" id="edit-email-btn" class="text-cerulean hover:text-cerulean-dark font-semibold underline underline-offset-2 ml-1">
+                Edit email
+              </button>
+            </p>
+          </div>
+        </div>
+
+        <!-- Preview mode notice if Google Apps Script URL has not been set yet -->
+        <div id="preview-mode-banner" class="hidden p-3.5 rounded-xl bg-sunshine/25 border border-sunshine-dark/30 text-xs text-ink leading-relaxed">
+          <div class="font-bold flex items-center gap-1.5 text-ink mb-1">
+            <i class="fa-solid fa-circle-info text-coral"></i> Backend Setup Notice:
+          </div>
+          Your Google Apps Script Web App URL has not been pasted into <code>index.html</code> yet. To test immediately, your verification code is:
+          <span id="preview-otp-code" class="font-mono text-base font-bold bg-white px-2 py-0.5 rounded border border-ink/10 text-coral ml-1 inline-block"></span>
+          <p class="mt-1 text-[11px] text-ink/60">Follow the steps in <code>google-apps-script.js</code> to connect your Gmail server.</p>
+        </div>
+
+        <div>
+          <label for="otp-input" class="block text-sm font-semibold text-ink/80 mb-2 text-center">Enter 6-Digit Code</label>
+          <div class="max-w-[260px] mx-auto">
+            <input id="otp-input" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" placeholder="------" class="w-full text-center text-3xl font-mono font-extrabold tracking-[0.4em] py-3.5 px-4 rounded-2xl border-2 border-ink/20 focus:border-coral focus:ring-4 focus:ring-coral/15 outline-none transition bg-cream/20 text-ink" />
+          </div>
+          <div id="otp-feedback" class="mt-2.5 text-center text-xs font-semibold hidden"></div>
+        </div>
+
+        <div class="space-y-3 pt-1">
+          <button type="button" id="verify-otp-btn" class="w-full inline-flex items-center justify-center gap-2 bg-coral hover:bg-coral-dark text-cream font-bold text-base px-8 py-4 rounded-full transition-all shadow-lg shadow-coral/25 disabled:opacity-60 disabled:cursor-not-allowed">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Verify &amp; Confirm Booking</span>
+          </button>
+          
+          <div class="flex items-center justify-between text-xs pt-1 px-1">
+            <button type="button" id="back-to-step1-btn" class="text-ink/60 hover:text-ink font-medium flex items-center gap-1.5 transition-colors">
+              <i class="fa-solid fa-arrow-left text-[11px]"></i> Edit details
+            </button>
+            <button type="button" id="resend-otp-btn" class="text-cerulean hover:text-cerulean-dark font-semibold transition-colors disabled:text-ink/40 disabled:cursor-not-allowed">
+              Resend code (<span id="resend-countdown">60</span>s)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= STEP 3: BOOKING CONFIRMED ================= -->
+      <div id="success-container" class="hidden text-center py-4 space-y-6">
+        <div class="relative w-20 h-20 mx-auto">
+          <div class="absolute inset-0 bg-coral/20 blob float-a"></div>
+          <div class="relative w-full h-full rounded-full bg-cerulean text-cream flex items-center justify-center text-3xl shadow-xl shadow-cerulean/25">
+            <i class="fa-solid fa-check"></i>
+          </div>
+        </div>
+
+        <div>
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 mb-2.5">
+            <i class="fa-solid fa-shield-check text-emerald-600"></i> Email Verified &amp; Registration Complete
+          </span>
+          <h3 class="font-display font-bold text-2xl sm:text-3xl text-ink">You're All Set!</h3>
+          <p class="text-ink/70 text-sm mt-2 max-w-sm mx-auto">
+            Thank you, <strong id="success-name" class="text-ink"></strong>! We've received your registration and alerted Priti Rane.
+          </p>
+        </div>
+
+        <div class="bg-cream/60 border border-ink/10 rounded-2xl p-5 text-left text-sm space-y-2.5">
+          <div class="flex justify-between items-center text-xs pb-2.5 border-b border-ink/10">
+            <span class="text-ink/50 uppercase tracking-wider font-semibold">Confirmed Details</span>
+            <span class="text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-xs"></i> Verified</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-ink/60 text-xs sm:text-sm">Student Name:</span>
+            <strong id="success-display-name" class="text-ink"></strong>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-ink/60 text-xs sm:text-sm">Course Selected:</span>
+            <strong id="success-display-course" class="text-coral"></strong>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-ink/60 text-xs sm:text-sm">Verified Email:</span>
+            <span id="success-display-email" class="text-ink font-mono text-xs"></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-ink/60 text-xs sm:text-sm">Contact Phone:</span>
+            <span id="success-display-phone" class="text-ink font-medium"></span>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-sunshine/15 border border-sunshine/30 text-xs text-ink/80 text-left flex items-start gap-3">
+          <i class="fa-solid fa-chalkboard-user text-coral text-lg shrink-0 mt-0.5"></i>
+          <div>
+            <strong class="text-ink block mb-0.5">Next Step: Scheduling Your Free Trial</strong>
+            <p>Priti Rane will reach out on WhatsApp or phone within 24 hours to pick a class slot that suits your schedule. Classes are held in batches of 2&ndash;3 students only.</p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+          <a id="success-whatsapp-link" href="https://wa.me/918010369386" target="_blank" rel="noopener noreferrer" class="flex-1 inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-sm px-6 py-3.5 rounded-full transition-colors shadow-sm">
+            <i class="fa-brands fa-whatsapp text-lg"></i> Chat on WhatsApp
+          </a>
+          <button type="button" id="book-another-btn" class="inline-flex items-center justify-center gap-2 border border-ink/15 hover:border-ink/30 text-ink/70 hover:text-ink font-semibold text-sm px-5 py-3.5 rounded-full transition-colors">
+            Book Another Class
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-ink text-cream/70 pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-5 md:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 pb-10 border-b border-white/10">
+      <div class="flex items-center gap-2">
+        <span class="relative w-9 h-9 shrink-0">
+          <span class="absolute inset-0 bg-coral blob"></span>
+          <span class="absolute inset-0 flex items-center justify-center text-cream text-sm"><i class="fa-solid fa-palette"></i></span>
+        </span>
+        <span class="font-display font-bold text-xl text-cream">The Palette Studio</span>
+      </div>
+
+      <a href="tel:+918010369386" class="flex items-center gap-2 font-semibold text-cream/80 hover:text-sunshine transition-colors">
+        <i class="fa-solid fa-phone"></i> +91 80103 69386
+      </a>
+
+      <div class="flex items-center gap-4">
+        <a href="#" aria-label="Instagram" class="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center hover:bg-coral hover:border-coral transition-colors"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook" class="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center hover:bg-coral hover:border-coral transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="YouTube" class="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center hover:bg-coral hover:border-coral transition-colors"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#" aria-label="Pinterest" class="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center hover:bg-coral hover:border-coral transition-colors"><i class="fa-brands fa-pinterest-p"></i></a>
+      </div>
+    </div>
+
+    <div class="pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-sm">
+      <p>&copy; <span id="year"></span> The Palette Studio. All rights reserved.</p>
+      <p class="italic font-display">Where imagination meets the canvas.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script>
+  // ================= CONFIGURATION =================
+  // 🔴 Replace with your deployed Google Apps Script Web App URL (see google-apps-script.js)
+  const GOOGLE_SCRIPT_API_URL = "https://script.google.com/macros/s/AKfycbxh95-ByHnj_yw6gKX02msWKW9QaV4Ezz8R8UG9xUQrp3h0UdN-ov0uyi1RI3R5bdc/exec";
+
+  // ================= STATE =================
+  let runtimeOTP = null;
+  let activeRegistrationData = null;
+  let resendTimer = null;
+  let resendCountdown = 60;
+
+  // ================= FAKE EMAIL PROTECTION ENGINE =================
+  const DISPOSABLE_EMAIL_DOMAINS = new Set([
+    "mailinator.com", "mailinator.net", "mailin8r.com", "mailinator2.com", "notmailinator.com",
+    "10minutemail.com", "10minutemail.net", "10minutemail.co.uk", "10minmail.de", "20minutemail.it",
+    "tempmail.com", "temp-mail.org", "temp-mail.io", "tempail.com", "tempmailaddress.com",
+    "guerrillamail.com", "guerrillamail.net", "guerrillamail.biz", "guerrillamail.org", "guerrillamail.de",
+    "guerrillamailblock.com", "grr.la", "sharklasers.com", "spam4.me", "pokemail.net", "bccto.me",
+    "yopmail.com", "yopmail.fr", "yopmail.net", "cool.fr.nf", "jetable.fr.nf", "courriel.fr.nf",
+    "moncourrier.fr.nf", "mega.zik.dj", "trashmail.com", "trashmail.net", "trashmail.me", "trashmail.org",
+    "trashmail.ws", "throwawaymail.com", "throwawayemail.net", "dispostable.com", "getairmail.com",
+    "fake-email.com", "fake-box.com", "burnermail.io", "burnermail.org", "dropmail.me", "0-mail.com",
+    "maildrop.cc", "inboxkitten.com", "nada.ltd", "getnada.com", "crazymailing.com", "mytemp.email",
+    "mytempemail.com", "mohmal.com", "emailondeck.com", "generator.email", "clipmail.eu", "binkmail.com",
+    "safetymail.info", "zillamail.com", "spambox.us", "meltmail.com", "anonbox.net", "discard.email",
+    "discardmail.com", "spamevader.com", "emailfake.com", "crazymail.com", "disbox.net", "disbox.org",
+    "fakeinbox.com", "harakirimail.com", "incognitomail.com", "tmail.ws", "tmail.link", "tempemail.net",
+    "tempemail.co", "temporarymail.com", "dayrep.com", "teleworm.us", "armyspy.com", "cuvox.de",
+    "fleckens.hu", "gustr.com", "jourrapide.com", "rhyta.com", "superrito.com", "spambog.com",
+    "trashymail.com", "mytempmail.com", "mytempemail.net", "fakemailgenerator.com"
+  ]);
+
+  const DUMMY_DOMAINS = new Set([
+    "test.com", "example.com", "fake.com", "sample.com", "asdf.com", "foo.com",
+    "bar.com", "invalid.com", "none.com", "nomail.com", "placeholder.com",
+    "nowhere.com", "xyz.com", "domain.com", "test.net", "example.net",
+    "test.org", "example.org", "dummy.com", "myemail.com", "testing.com", "temp.com"
+  ]);
+
+  const DUMMY_LOCAL_PREFIXES = new Set([
+    "test", "testing", "fake", "asdf", "qwerty", "noemail", "12345", "123456",
+    "none", "na", "abc", "xyz", "sample", "admin", "null", "user", "someone", "nobody"
+  ]);
+
+  const DOMAIN_TYPO_MAP = {
+    "gmai.com": "gmail.com",
+    "gamil.com": "gmail.com",
+    "gmial.com": "gmail.com",
+    "gmaill.com": "gmail.com",
+    "gmil.com": "gmail.com",
+    "gnail.com": "gmail.com",
+    "gmaik.com": "gmail.com",
+    "gmail.co": "gmail.com",
+    "gmail.con": "gmail.com",
+    "yaho.com": "yahoo.com",
+    "yahooo.com": "yahoo.com",
+    "yahu.com": "yahoo.com",
+    "yhaoo.com": "yahoo.com",
+    "yahoo.co": "yahoo.com",
+    "yahoo.con": "yahoo.com",
+    "hotmial.com": "hotmail.com",
+    "hotmai.com": "hotmail.com",
+    "hotmaill.com": "hotmail.com",
+    "hotmsil.com": "hotmail.com",
+    "hotmail.co": "hotmail.com",
+    "hotmail.con": "hotmail.com",
+    "outlok.com": "outlook.com",
+    "outloo.com": "outlook.com",
+    "outlock.com": "outlook.com",
+    "outllook.com": "outlook.com",
+    "outlook.co": "outlook.com",
+    "outlook.con": "outlook.com",
+    "icld.com": "icloud.com",
+    "iclud.com": "icloud.com",
+    "iclould.com": "icloud.com"
+  };
+
+  function validateEmail(email) {
+    const trimmed = (email || "").trim().toLowerCase();
+    if (!trimmed) {
+      return { valid: false, error: "Please enter your email address." };
+    }
+
+    // RFC 5322 pattern check
+    const basicRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+    if (!basicRegex.test(trimmed)) {
+      return { valid: false, error: "Please enter a valid email format (e.g. name@example.com)." };
+    }
+
+    const parts = trimmed.split("@");
+    if (parts.length !== 2) {
+      return { valid: false, error: "Email must contain exactly one '@' symbol." };
+    }
+
+    const [localPart, domainPart] = parts;
+
+    // Check domain structure
+    if (!domainPart.includes(".")) {
+      return { valid: false, error: "Email domain must include a valid extension (e.g. .com)." };
+    }
+    const tld = domainPart.split(".").pop();
+    if (!tld || tld.length < 2 || /\d/.test(tld)) {
+      return { valid: false, error: "Email contains an invalid domain extension." };
+    }
+
+    // Check for domain typo
+    if (DOMAIN_TYPO_MAP[domainPart]) {
+      const suggestedDomain = DOMAIN_TYPO_MAP[domainPart];
+      const suggestedEmail = `${localPart}@${suggestedDomain}`;
+      return {
+        valid: false,
+        isTypo: true,
+        suggestion: suggestedEmail,
+        error: `Did you mean <button type="button" class="underline font-bold text-cerulean hover:text-cerulean-dark cursor-pointer ml-1" onclick="applySuggestedEmail('${suggestedEmail}')">${suggestedEmail}</button>?`
+      };
+    }
+
+    // Check disposable domains
+    if (DISPOSABLE_EMAIL_DOMAINS.has(domainPart)) {
+      return {
+        valid: false,
+        isDisposable: true,
+        error: "Temporary & disposable email services are blocked. Please use your genuine personal or work email."
+      };
+    }
+
+    // Check dummy domains
+    if (DUMMY_DOMAINS.has(domainPart)) {
+      return {
+        valid: false,
+        error: "Please enter a genuine, active email address where we can deliver your verification code."
+      };
+    }
+
+    // Check bogus local part with test prefixes
+    if (DUMMY_LOCAL_PREFIXES.has(localPart)) {
+      return {
+        valid: false,
+        error: "Please enter a valid personal or parent email address."
+      };
+    }
+
+    return { valid: true };
+  }
+
+  // Interactive typo suggestion helper
+  window.applySuggestedEmail = function(suggestedEmail) {
+    const emailInput = document.getElementById("email");
+    emailInput.value = suggestedEmail;
+    triggerEmailValidation();
+    emailInput.focus();
+  };
+
+  const emailInput = document.getElementById("email");
+  const emailFeedback = document.getElementById("email-feedback");
+  const emailIcon = document.getElementById("email-status-icon");
+
+  function triggerEmailValidation() {
+    const val = emailInput.value;
+    if (!val) {
+      emailFeedback.classList.add("hidden");
+      emailInput.classList.remove("field-error", "field-valid");
+      emailIcon.innerHTML = '<i class="fa-solid fa-envelope"></i>';
+      emailIcon.className = "absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-ink/30 pointer-events-none transition-colors";
+      return false;
+    }
+
+    const result = validateEmail(val);
+    if (!result.valid) {
+      emailFeedback.innerHTML = `<span class="flex items-center gap-1.5"><i class="fa-solid fa-triangle-exclamation text-coral"></i> ${result.error}</span>`;
+      emailFeedback.className = "mt-2 text-xs text-coral-dark bg-coral/10 border border-coral/20 rounded-lg p-2.5";
+      emailFeedback.classList.remove("hidden");
+      emailInput.classList.add("field-error");
+      emailInput.classList.remove("field-valid");
+      emailIcon.innerHTML = '<i class="fa-solid fa-circle-exclamation text-coral"></i>';
+      emailIcon.className = "absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-coral pointer-events-none transition-colors";
+      return false;
+    } else {
+      emailFeedback.innerHTML = `<span class="flex items-center gap-1.5 text-emerald-700"><i class="fa-solid fa-circle-check text-emerald-600"></i> Valid email format</span>`;
+      emailFeedback.className = "mt-2 text-xs text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg p-2";
+      emailFeedback.classList.remove("hidden");
+      emailInput.classList.remove("field-error");
+      emailInput.classList.add("field-valid");
+      emailIcon.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i>';
+      emailIcon.className = "absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-emerald-600 pointer-events-none transition-colors";
+      return true;
+    }
+  }
+
+  emailInput.addEventListener("blur", triggerEmailValidation);
+  emailInput.addEventListener("input", () => {
+    // If there's an active error, re-evaluate as user types
+    if (emailInput.classList.contains("field-error")) {
+      triggerEmailValidation();
+    }
+  });
+
+  // Phone validation (Sanity format check - NO SMS verification needed as per requirement)
+  function validatePhoneNumber(phone) {
+    const cleaned = phone.replace(/[^0-9+]/g, '');
+    const digitsOnly = phone.replace(/\D/g, '');
+    return digitsOnly.length >= 7 && digitsOnly.length <= 15;
+  }
+
+  // ================= STEP 1: FORM SUBMISSION & SEND OTP =================
+  const trialForm = document.getElementById("trial-form");
+  const otpContainer = document.getElementById("otp-container");
+  const successContainer = document.getElementById("success-container");
+  const sendOtpBtn = document.getElementById("send-otp-btn");
+  const displayUserEmail = document.getElementById("display-user-email");
+  const previewBanner = document.getElementById("preview-mode-banner");
+  const previewOtpCode = document.getElementById("preview-otp-code");
+  const otpInput = document.getElementById("otp-input");
+  const otpFeedback = document.getElementById("otp-feedback");
+  const verifyOtpBtn = document.getElementById("verify-otp-btn");
+  const resendOtpBtn = document.getElementById("resend-otp-btn");
+  const resendCountdownEl = document.getElementById("resend-countdown");
+
+  trialForm.addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("parent-name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const age = document.getElementById("student-age").value.trim();
+    const course = document.getElementById("course").value;
+    const timezone = document.getElementById("timezone").value.trim();
+
+    // 1. Validate Email with Fake Email Protection
+    const isEmailValid = triggerEmailValidation();
+    if (!isEmailValid) {
+      emailInput.focus();
+      emailInput.classList.add("shake");
+      setTimeout(() => emailInput.classList.remove("shake"), 500);
+      return;
+    }
+
+    // 2. Validate Phone Format (no verification, just valid number check)
+    if (!validatePhoneNumber(phone)) {
+      alert("Please provide a valid contact phone number with at least 7 digits.");
+      document.getElementById("phone").focus();
+      return;
+    }
+
+    // 3. Store registration data
+    activeRegistrationData = { name, email, phone, age, course, timezone };
+
+    // 4. Generate 6-Digit Verification OTP
+    runtimeOTP = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // UI Loading state
+    sendOtpBtn.disabled = true;
+    sendOtpBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Sending Verification Code...</span>';
+
+    // 5. Dispatch to Google Apps Script Backend (if configured)
+    const isScriptConfigured = GOOGLE_SCRIPT_API_URL && !GOOGLE_SCRIPT_API_URL.includes("YOUR_GOOGLE_WEB_APP_URL");
+
+    if (isScriptConfigured) {
+      try {
+        // Send simple POST with action: SEND_OTP to send OTP code to the USER ONLY
+        const res = await fetch(GOOGLE_SCRIPT_API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "SEND_OTP",
+            name: name,
+            email: email,
+            phone: phone,
+            age: age,
+            course: course,
+            timezone: timezone,
+            otp: runtimeOTP
+          })
+        });
+        const respData = await res.json().catch(() => null);
+        if (respData && respData.status === "error") {
+          alert("Server Error: " + respData.message);
+          sendOtpBtn.disabled = false;
+          sendOtpBtn.innerHTML = '<span>Send Verification Code</span><i class="fa-solid fa-arrow-right text-sm"></i>';
+          return;
+        }
+      } catch (err) {
+        console.warn("Script transmission note:", err);
+      }
+      previewBanner.classList.add("hidden");
+    } else {
+      // Preview mode notice (Google Apps Script not deployed yet)
+      previewBanner.classList.remove("hidden");
+      previewOtpCode.textContent = runtimeOTP;
+    }
+
+    // 6. Transition to Step 2: OTP Verification
+    trialForm.classList.add("hidden");
+    otpContainer.classList.remove("hidden");
+    displayUserEmail.textContent = email;
+    otpInput.value = "";
+    otpFeedback.classList.add("hidden");
+    otpInput.focus();
+
+    // Start 60s resend cooldown
+    startResendCooldown();
+
+    // Reset submit button state
+    sendOtpBtn.disabled = false;
+    sendOtpBtn.innerHTML = '<span>Send Verification Code</span><i class="fa-solid fa-arrow-right text-sm"></i>';
+  });
+
+  // ================= STEP 2: VERIFY OTP =================
+  async function handleOtpVerification() {
+    const entered = otpInput.value.trim();
+
+    if (!entered || entered.length !== 6) {
+      otpFeedback.textContent = "Please enter the complete 6-digit verification code.";
+      otpFeedback.classList.remove("hidden", "text-emerald-700");
+      otpFeedback.classList.add("text-coral");
+      otpInput.classList.add("shake");
+      setTimeout(() => otpInput.classList.remove("shake"), 500);
+      return;
+    }
+
+    verifyOtpBtn.disabled = true;
+    verifyOtpBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Verifying &amp; Confirming...</span>';
+
+    if (entered === runtimeOTP) {
+      // ✅ SUCCESS! User has successfully completed OTP authentication.
+      // Now notify the admin via Google Apps Script (CONFIRM_BOOKING action)
+      const isScriptConfigured = GOOGLE_SCRIPT_API_URL && !GOOGLE_SCRIPT_API_URL.includes("YOUR_GOOGLE_WEB_APP_URL");
+
+      if (isScriptConfigured) {
+        try {
+          await fetch(GOOGLE_SCRIPT_API_URL, {
+            method: "POST",
+            body: JSON.stringify({
+              action: "CONFIRM_BOOKING",
+              name: activeRegistrationData.name,
+              email: activeRegistrationData.email,
+              phone: activeRegistrationData.phone,
+              age: activeRegistrationData.age,
+              course: activeRegistrationData.course,
+              timezone: activeRegistrationData.timezone,
+              otp: runtimeOTP
+            })
+          });
+        } catch (err) {
+          console.warn("Booking confirmation transmission note:", err);
+        }
+      }
+
+      // Transition to Step 3 (Success Screen)
+      otpContainer.classList.add("hidden");
+      successContainer.classList.remove("hidden");
+
+      // Populate summary
+      document.getElementById("success-name").textContent = activeRegistrationData.name;
+      document.getElementById("success-display-name").textContent = activeRegistrationData.name;
+      document.getElementById("success-display-course").textContent = activeRegistrationData.course;
+      document.getElementById("success-display-email").textContent = activeRegistrationData.email;
+      document.getElementById("success-display-phone").textContent = activeRegistrationData.phone;
+
+      // WhatsApp direct link with pre-filled greeting
+      const cleanPhone = activeRegistrationData.phone.replace(/\D/g, "");
+      const waText = encodeURIComponent(`Hi Priti, I've just booked a free trial class for ${activeRegistrationData.name} (${activeRegistrationData.course}) on The Palette Studio!`);
+      document.getElementById("success-whatsapp-link").href = `https://wa.me/918010369386?text=${waText}`;
+
+      successContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    } else {
+      // ❌ Code mismatch
+      otpFeedback.textContent = "Invalid verification code. Please check your inbox or click 'Resend code'.";
+      otpFeedback.classList.remove("hidden", "text-emerald-700");
+      otpFeedback.classList.add("text-coral");
+      otpInput.classList.add("shake", "field-error");
+      setTimeout(() => otpInput.classList.remove("shake"), 500);
+      verifyOtpBtn.disabled = false;
+      verifyOtpBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i><span>Verify &amp; Confirm Booking</span>';
+    }
+  }
+
+  verifyOtpBtn.addEventListener("click", handleOtpVerification);
+  otpInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleOtpVerification();
+    }
+  });
+
+  // Auto-verify when 6 digits are typed
+  otpInput.addEventListener("input", () => {
+    otpInput.classList.remove("field-error");
+    otpFeedback.classList.add("hidden");
+    if (otpInput.value.length === 6) {
+      handleOtpVerification();
+    }
+  });
+
+  // ================= RESEND CODE & STEP BACK =================
+  function startResendCooldown() {
+    clearInterval(resendTimer);
+    resendCountdown = 60;
+    resendOtpBtn.disabled = true;
+    resendCountdownEl.textContent = resendCountdown;
+
+    resendTimer = setInterval(() => {
+      resendCountdown--;
+      resendCountdownEl.textContent = resendCountdown;
+      if (resendCountdown <= 0) {
+        clearInterval(resendTimer);
+        resendOtpBtn.disabled = false;
+        resendOtpBtn.innerHTML = '<i class="fa-solid fa-rotate-right mr-1"></i> Resend code';
+      }
+    }, 1000);
+  }
+
+  resendOtpBtn.addEventListener("click", async () => {
+    if (resendOtpBtn.disabled || !activeRegistrationData) return;
+
+    runtimeOTP = Math.floor(100000 + Math.random() * 900000).toString();
+    startResendCooldown();
+
+    otpFeedback.textContent = "A new verification code has been dispatched to your email.";
+    otpFeedback.classList.remove("hidden", "text-coral");
+    otpFeedback.classList.add("text-emerald-700");
+
+    const isScriptConfigured = GOOGLE_SCRIPT_API_URL && !GOOGLE_SCRIPT_API_URL.includes("YOUR_GOOGLE_WEB_APP_URL");
+    if (isScriptConfigured) {
+      try {
+        await fetch(GOOGLE_SCRIPT_API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "SEND_OTP",
+            name: activeRegistrationData.name,
+            email: activeRegistrationData.email,
+            phone: activeRegistrationData.phone,
+            age: activeRegistrationData.age,
+            course: activeRegistrationData.course,
+            timezone: activeRegistrationData.timezone,
+            otp: runtimeOTP
+          })
+        });
+      } catch (err) {
+        console.warn("Resend transmission note:", err);
+      }
+    } else {
+      previewOtpCode.textContent = runtimeOTP;
+    }
+  });
+
+  // Edit details & back buttons
+  document.getElementById("back-to-step1-btn").addEventListener("click", () => {
+    otpContainer.classList.add("hidden");
+    trialForm.classList.remove("hidden");
+  });
+
+  document.getElementById("edit-email-btn").addEventListener("click", () => {
+    otpContainer.classList.add("hidden");
+    trialForm.classList.remove("hidden");
+    emailInput.focus();
+  });
+
+  // Book another class
+  document.getElementById("book-another-btn").addEventListener("click", () => {
+    successContainer.classList.add("hidden");
+    trialForm.reset();
+    emailFeedback.classList.add("hidden");
+    emailInput.classList.remove("field-error", "field-valid");
+    emailIcon.innerHTML = '<i class="fa-solid fa-envelope"></i>';
+    emailIcon.className = "absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-ink/30 pointer-events-none transition-colors";
+    trialForm.classList.remove("hidden");
+    trialForm.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+
+  // ================= GENERAL SITE SCRIPTS =================
+  // Footer current year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Sticky header background on scroll
+  const header = document.getElementById('site-header');
+  const onScroll = () => {
+    if (window.scrollY > 24) {
+      header.classList.add('bg-cream/90', 'backdrop-blur-md', 'shadow-md');
+    } else {
+      header.classList.remove('bg-cream/90', 'backdrop-blur-md', 'shadow-md');
+    }
+  };
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  menuBtn.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', isOpen);
+    menuBtn.innerHTML = isOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+  });
+  document.querySelectorAll('#mobile-menu a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', false);
+    menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+  }));
+
+  // Fade-in / draw-on-scroll via IntersectionObserver
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-up, h1, h2').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
